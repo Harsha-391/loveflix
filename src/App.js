@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import memories from './memories';
+import LandingPage from './LandingPage'; // Import the new component
 
 function App() {
   const [selectedMemory, setSelectedMemory] = useState(null);
+  const [showWebsite, setShowWebsite] = useState(false);
 
-  // Get unique categories from your data
+  // LOGIC: Check if today is past 14 DEC
+  useEffect(() => {
+    const checkDate = () => {
+      const targetDate = new Date('2025-12-14T00:00:00'); // Adjust year if needed!
+      const now = new Date();
+      
+      // If current date is greater than or equal to target, show the site
+      if (now >= targetDate) {
+        setShowWebsite(true);
+      }
+    };
+    checkDate();
+  }, []);
+
+  // 1. If it's NOT time yet, show the Landing Page (Wait Screen)
+  if (!showWebsite) {
+    return <LandingPage />;
+  }
+
+  // 2. If it IS time (or you change the date logic above), show the LoveFlix App
   const categories = [...new Set(memories.map(m => m.category))];
 
   return (
